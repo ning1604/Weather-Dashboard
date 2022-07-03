@@ -69,3 +69,36 @@ li {
     font-size: 18px;
     font-weight: 500;
 }
+
+/* current weather section */
+
+.currentWeatherContainer {
+    height: fit-content;
+    width: 800px;
+    min-width: 475px;
+    border: 1px solid black;
+    margin: 15px;
+}
+
+.name {
+    padding-top: 10px;    
+    padding-left: 10px;
+}
+
+p {
+    font-size: 20px;
+    font-weight: 500;
+    padding-left: 10px;
+}
+
+span {
+    font-size: 15px;
+    padding: 5px 15px;
+    color: white;
+    background-color: green;
+    border-radius: 5px;
+}
+
+.hide {
+    display: none;
+} 

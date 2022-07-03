@@ -5,13 +5,72 @@ var today = moment();
 var currentWeather = document.querySelector(".currentWeatherContainer")
 var recentSearches = document.querySelector(".recentSearches")
 
-// when submit button is clicked call weatherInfo function
-searchButton.addEventListener("click", function(event) {
+var searchHistory = [];
+
+// The following function renders items in recent searches list as <li> elements
+function renderSearchHistory() {
+    // clear search history
+    recentSearches.innerHTML = "";
+
+    // render a new li for each search item
+    for (var i = 0; i < searchHistory.length; i++) {
+        var History = searchHistory[i];
+        var li = document.createElement("li");
+        li.textContent = History;
+        li.setAttribute("data-value", History)
+        recentSearches.appendChild(li)
+    }
+}
+
+// The function below will run whent the page loads
+function init() {
+    // Get stored recent searches from localStorage
+    var storedHistory = JSON.parse(localStorage.getItem("searchHistory"));
+    if (storedHistory !== null) {
+        searchHistory = storedHistory;
+    }
+    renderSearchHistory();
+}
+
+function storeHistory() {
+    localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+}
+
+function addSearchInput() {
+    // var cityName = JSON.stringify(cityName)
+    // return function if submitted city is not found
+    if (citySearchName === "city not found") {
+        return;
+    }
+
+    // adds new search input to list
+    searchHistory.push(citySearchName);
+
+    // updates localStorage and re-renders recent searches' list
+    storeHistory();
+    renderSearchHistory();
+}
+
+// Add click event to recentSearches
+recentSearches.addEventListener("click", function (event) {
+    var element = event.target;
+    addHide()
+    // checks if element is a li, and re-calls city weather
+    if (element.matches("li") === true) {
+        // gets city name from "data-value" attribute
+        var inputValue = element.getAttribute("data-value");
+        // uses city name from above and sets it as userInput
+        userInput.value = inputValue
+        weatherInfo()
+    }
+})
+
+
+searchButton.addEventListener("click", function (event) {
     event.preventDefault
     weatherInfo()
 })
 
-// this function fetches weather api information
 function weatherInfo() {
 
     currentWeather.innerHTML = "";
@@ -24,12 +83,29 @@ function weatherInfo() {
             var latValue = data['city']['coord']['lat']
             var lonValue = data['city']['coord']['lon']
             var cityName = data['city']['name'];
+            var citySearchName = data['city']['name'];
             var weatherIcon = data['list'][0]['weather'][0]['icon']
             var iconUrl = 'http://openweathermap.org/img/w/' + weatherIcon + '.png'
             var temp = data['list'][0]['main']['temp']
             var wind = data['list'][0]['wind']['speed']
             var humidity = data['list'][0]['main']['humidity']
 
+            // function to add search input to recent searches
+            function addSearchInput() {
+                // return function if submitted city is not found
+                if (citySearchName === "city not found" || searchHistory.includes(citySearchName)) {
+                    return;
+                }
+
+                // adds new search input to list
+                searchHistory.push(citySearchName);
+
+                // updates localStorage and re-renders recent searches' list
+                storeHistory();
+                renderSearchHistory();
+            }
+
+            addSearchInput()
 
             // creating h2 element for name, date, and weather icon
             var nameDateIcon = document.createElement('h2')
@@ -101,3 +177,6 @@ function addHide() {
         currentWeather.classList.add("hide");
     }
 }
+
+// Calls init to retrieve data and render it to the page on load
+init()
