@@ -1,3 +1,71 @@
 * {
-    color: red;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+h1 {
+    color: white;
+    padding: 25px 0;
+    font-weight: bolder;
+    font-size: 45px;
+    margin-bottom: 0;
+}
+
+h2 {
+    font-weight: bolder;
+    font-size: 38px;
+}
+
+header {
+    background: linear-gradient(90deg, rgba(0,134,255,1) 0%, rgba(9,9,121,1) 62%, rgba(2,0,36,1) 100%);
+    height: auto;
+    width: 100vw;
+}
+
+.searchSectionContainer {
+    height: auto;
+    width: 475px;
+    margin: 15px 0 0 15px;
+    background-color: rgb(226, 246, 252);
+}
+
+input {
+    width: 100%;
+    height: 65px;
+    border-radius: 10px;
+    padding-left: 15px;
+    margin: 10px 0;
+    font-size: 20px;
+}
+
+button {
+    width: 100%;
+    height: 45px;
+    border-radius: 10px;
+    margin: 15px 0;
+    border: none;
+    background-color: rgb(81, 174, 255);
+    color: white;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+ul {
+    border-top: 2px solid darkgrey;
+    padding-top: 10px;
+    margin-top: 15px;
+    list-style-type: none;
+}
+
+li {
+    width: 100%;
+    height: 45px;
+    border-radius: 10px; 
+    background-color: rgb(195, 195, 195);
+    text-align: center;
+    padding-top: 8px;
+    margin-top: 25px;
+    font-size: 18px;
+    font-weight: 500;
 }
