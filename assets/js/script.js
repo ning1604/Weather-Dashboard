@@ -3,7 +3,11 @@ var closeButton = document.getElementById("closeBtn")
 var userInput = document.querySelector("#userInput")
 var today = moment();
 var currentWeather = document.querySelector(".currentWeatherContainer")
+var fiveDayForecast = document.querySelector(".fiveDayForecast")
 var recentSearches = document.querySelector(".recentSearches")
+var weatherInformation = document.querySelector(".weatherInformation")
+var forecastHeader = document.querySelector(".forecastHeader")
+var fiveDays = ["", moment().add(1, 'days').format("MM/DD/YY"), moment().add(2, 'days').format("MM/DD/YY"), moment().add(3, 'days').format("MM/DD/YY"), moment().add(4, 'days').format("MM/DD/YY"), moment().add(5, 'days').format("MM/DD/YY")]
 
 var searchHistory = [];
 
@@ -62,6 +66,7 @@ recentSearches.addEventListener("click", function (event) {
         // uses city name from above and sets it as userInput
         userInput.value = inputValue
         weatherInfo()
+        forecastHeader.classList.remove("hide")
     }
 })
 
@@ -74,6 +79,7 @@ searchButton.addEventListener("click", function (event) {
 function weatherInfo() {
 
     currentWeather.innerHTML = "";
+    fiveDayForecast.innerHTML = "";
 
     fetch('https://api.openweathermap.org/data/2.5/forecast?q=' + userInput.value + '&units=imperial&appid=ce650ca3b8256a609c92e10eac6097e7')
         .then(response => response.json())
@@ -122,6 +128,26 @@ function weatherInfo() {
             `
             currentWeather.appendChild(currWeatherInfo)
 
+            // creating 5 day forecast elements
+            function dailyForecast() {
+                for (i = 1; i < 6; i++) {
+                    var dayForecast = document.createElement("div")
+
+                    dayForecast.setAttribute("class", "daily-forecast d-flex flex-column")
+                    dayForecast.innerHTML = `
+                <h4>${fiveDays[i]}</h4>
+                <img id="icon" src=${'http://openweathermap.org/img/w/' + data['list'][i]['weather'][0]['icon'] + '.png'} alt="Weather icon">
+                <p>Temp: ${data['list'][i]['main']['temp']}&#176F</p>
+                <p>Wind: ${data['list'][i]['wind']['speed']} MPH</p>
+                <p>Humidity: ${data['list'][i]['main']['humidity']}%</p>
+                `
+                    fiveDayForecast.appendChild(dayForecast)
+                }
+
+            }
+
+            dailyForecast()
+
             fetch('https://api.openweathermap.org/data/2.5/onecall?lat=' + latValue + '&lon=' + lonValue + '&exclude=daily,hourly,minutely,alerts&appid=ce650ca3b8256a609c92e10eac6097e7')
                 .then(response => response.json())
                 .then(data => {
@@ -144,6 +170,7 @@ function weatherInfo() {
 
             // shows weather information after all information is retrieved
             removeHide()
+            forecastHeader.classList.remove("hide")
             // clears search input box after weather information is displayed
             userInput.value = "";
 
@@ -157,6 +184,7 @@ function weatherInfo() {
 // toggles on modal prompting user that no location has been found 
 function noLocation() {
     $('#exampleModal').modal('toggle');
+    forecastHeader.classList.add("hide")
     addHide()
 }
 
