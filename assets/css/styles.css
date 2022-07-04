@@ -22,7 +22,13 @@ h3 {
     font-weight: bolder;
     display: inline-block;
     height: auto;
-    margin: 0 15px 15px 15px;
+    margin: 15px;
+}
+
+p {
+    font-size: 20px;
+    font-weight: 500;
+    padding-left: 10px;
 }
 
 header {
@@ -31,11 +37,19 @@ header {
     width: 100vw;
 }
 
+main {
+    height: auto;
+    width: 100%;
+    margin: 15px;
+    padding-right: 15px;
+    flex-direction: row;
+}
+
+/* Search section */
 .searchSectionContainer {
     height: auto;
-    width: 475px;
-    margin: 15px 0 0 15px;
-    background-color: rgb(226, 246, 252);
+    flex-basis: 475px;
+    margin: 15px 15px 0 15px;
 }
 
 input {
@@ -57,6 +71,12 @@ button {
     color: white;
     font-size: 18px;
     font-weight: 500;
+    transition: 300ms opacity ease-in-out;
+}
+
+button:hover, li:hover {
+    opacity: 0.35;
+    cursor: pointer;
 }
 
 ul {
@@ -76,16 +96,37 @@ li {
     margin-top: 25px;
     font-size: 18px;
     font-weight: 500;
+    transition: 300ms opacity ease-in-out;
 }
 
-/* current weather section */
+/* weather information section */
+
+.weatherInformation {
+    width: 100%;
+    height: auto;
+    margin-right: 20px;
+}
 
 .currentWeatherContainer {
-    height: fit-content;
-    width: 1200px;
-    min-width: 475px;
+    height: auto;
+    max-width: 1062px;
     border: 1px solid black;
-    margin: 15px;
+    margin: 0 15px;
+}
+
+.fiveDayForecast {
+    height: auto;
+    margin-left: 15px;
+}
+
+.daily-forecast {
+    height: auto;
+    width: 200px;
+    color: white;
+    background-color: rgb(58, 58, 92);
+    margin-right: 15px;
+    margin-bottom: 15px;
+    padding: 5px;
 }
 
 .name {
@@ -93,12 +134,7 @@ li {
     padding-left: 10px;
 }
 
-p {
-    font-size: 20px;
-    font-weight: 500;
-    padding-left: 10px;
-}
-
+/* span containing uv index value */
 span {
     font-size: 15px;
     padding: 5px 15px;
@@ -107,20 +143,17 @@ span {
     border-radius: 5px;
 }
 
+img {
+    height: 50px;
+    width: 50px;
+}
+
 .hide {
     display: none;
 }
 
-.daily-forecast {
-    height: auto;
-    width: 200px;
-    color: white;
-    background-color: rgb(58, 58, 92);
-    margin-left: 15px;
-    padding: 5px;
-}
-
-img {
-    height: 50px;
-    width: 50px;
+@media(max-width:780px) {
+    main {
+        flex-direction: column;
+    }
 }

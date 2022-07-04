@@ -15,8 +15,8 @@
     <header>
         <h1 class="d-flex justify-content-center">Weather Dashboard</h1>
     </header>
-    <main class="d-flex flex-wrap">
-
+    <main class="d-flex">
+        <!-- modal alerting user that location has not been found -->
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -30,7 +30,7 @@
                 </div>
             </div>
         </div>
-
+        <!-- This is the where user inputs location as well as where recent searches is stored -->
         <section class="searchSectionContainer">
             <h2>Search for a City:</h2>
             <div id="searchBox">
@@ -41,9 +41,9 @@
             <ul class="recentSearches"></ul>
         </section>
 
-        <section class="weatherInformation">
+        <section class="weatherInformation hide">
             <!-- append current weather information to div with class name "currentWeatherContainer" -->
-            <div class="currentWeatherContainer hide"></div>
+            <div class="currentWeatherContainer d-flex flex-column flex-wrap"></div>
             <h3 class="forecastHeader hide">5-Day Forecast:</h3>
             <!-- append 5-day forecast to "fiveDayForecast" class -->
             <div class="fiveDayForecast d-flex flex-row flex-wrap"></div>

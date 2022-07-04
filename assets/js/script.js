@@ -1,14 +1,14 @@
 var searchButton = document.querySelector("#search-btn")
 var closeButton = document.getElementById("closeBtn")
 var userInput = document.querySelector("#userInput")
-var today = moment();
 var currentWeather = document.querySelector(".currentWeatherContainer")
 var fiveDayForecast = document.querySelector(".fiveDayForecast")
 var recentSearches = document.querySelector(".recentSearches")
 var weatherInformation = document.querySelector(".weatherInformation")
 var forecastHeader = document.querySelector(".forecastHeader")
 var fiveDays = ["", moment().add(1, 'days').format("MM/DD/YY"), moment().add(2, 'days').format("MM/DD/YY"), moment().add(3, 'days').format("MM/DD/YY"), moment().add(4, 'days').format("MM/DD/YY"), moment().add(5, 'days').format("MM/DD/YY")]
-
+var weatherInformation = document.querySelector(".weatherInformation")
+var today = moment();
 var searchHistory = [];
 
 // The following function renders items in recent searches list as <li> elements
@@ -16,7 +16,7 @@ function renderSearchHistory() {
     // clear search history
     recentSearches.innerHTML = "";
 
-    // render a new li for each search item
+    // Render a new li for each search item
     for (var i = 0; i < searchHistory.length; i++) {
         var History = searchHistory[i];
         var li = document.createElement("li");
@@ -26,7 +26,7 @@ function renderSearchHistory() {
     }
 }
 
-// The function below will run whent the page loads
+// The function below will run when the page loads
 function init() {
     // Get stored recent searches from localStorage
     var storedHistory = JSON.parse(localStorage.getItem("searchHistory"));
@@ -36,21 +36,21 @@ function init() {
     renderSearchHistory();
 }
 
+// Function for storing search input to recent searches
 function storeHistory() {
     localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
 }
 
 function addSearchInput() {
-    // var cityName = JSON.stringify(cityName)
-    // return function if submitted city is not found
+    // Return function if submitted city is not found
     if (citySearchName === "city not found") {
         return;
     }
 
-    // adds new search input to list
+    // Adds new search input to list
     searchHistory.push(citySearchName);
 
-    // updates localStorage and re-renders recent searches' list
+    // Updates localStorage and re-renders recent searches' list
     storeHistory();
     renderSearchHistory();
 }
@@ -59,25 +59,26 @@ function addSearchInput() {
 recentSearches.addEventListener("click", function (event) {
     var element = event.target;
     addHide()
-    // checks if element is a li, and re-calls city weather
+    // Checks if element is a li, and re-calls city weather
     if (element.matches("li") === true) {
         // gets city name from "data-value" attribute
         var inputValue = element.getAttribute("data-value");
-        // uses city name from above and sets it as userInput
+        // Uses city name from above and sets it as userInput
         userInput.value = inputValue
         weatherInfo()
         forecastHeader.classList.remove("hide")
     }
 })
 
-
+// Added event listener to search button, when clicked, run weatherInfo function
 searchButton.addEventListener("click", function (event) {
     event.preventDefault
     weatherInfo()
 })
 
+// Main purpose of this function is to fetch weather information from api and display them on the page
 function weatherInfo() {
-
+    // Clearing previous weather information
     currentWeather.innerHTML = "";
     fiveDayForecast.innerHTML = "";
 
@@ -96,29 +97,30 @@ function weatherInfo() {
             var wind = data['list'][0]['wind']['speed']
             var humidity = data['list'][0]['main']['humidity']
 
-            // function to add search input to recent searches
+            // Function to add search input to recent searches
             function addSearchInput() {
-                // return function if submitted city is not found
+                // Return function if submitted city is not found or if it is already on the list
                 if (citySearchName === "city not found" || searchHistory.includes(citySearchName)) {
                     return;
                 }
 
-                // adds new search input to list
+                // Adds new search input to list
                 searchHistory.push(citySearchName);
 
-                // updates localStorage and re-renders recent searches' list
+                // Updates localStorage and re-renders recent searches' list
                 storeHistory();
                 renderSearchHistory();
             }
 
             addSearchInput()
 
-            // creating h2 element for name, date, and weather icon
+            // Creating h2 element for name, date, and weather icon
             var nameDateIcon = document.createElement('h2')
             nameDateIcon.innerHTML = `${cityName} (${today.format("MM/DD/YY")}) <img id="icon" src=${iconUrl} alt="Weather icon">`
             nameDateIcon.setAttribute("class", "name");
             currentWeather.appendChild(nameDateIcon)
-            //  adding more weather information to current weather container
+
+            //  Adding more weather information to current weather container
             var currWeatherInfo = document.createElement('div')
             currWeatherInfo.setAttribute("class", "currWeatherInfo")
             currWeatherInfo.innerHTML = `
@@ -128,7 +130,7 @@ function weatherInfo() {
             `
             currentWeather.appendChild(currWeatherInfo)
 
-            // creating 5 day forecast elements
+            // Creating 5 day forecast elements
             function dailyForecast() {
                 for (i = 1; i < 6; i++) {
                     var dayForecast = document.createElement("div")
@@ -143,11 +145,11 @@ function weatherInfo() {
                 `
                     fiveDayForecast.appendChild(dayForecast)
                 }
-
             }
 
             dailyForecast()
 
+            // Purpose of second fetch is to get uv index using the latitude and longitude value provided from previous fetch
             fetch('https://api.openweathermap.org/data/2.5/onecall?lat=' + latValue + '&lon=' + lonValue + '&exclude=daily,hourly,minutely,alerts&appid=ce650ca3b8256a609c92e10eac6097e7')
                 .then(response => response.json())
                 .then(data => {
@@ -157,7 +159,7 @@ function weatherInfo() {
                     uvValue.innerHTML = `UV Index: <span id="uvCondition">${uvIndex}</span>`
                     document.querySelector(".currWeatherInfo").appendChild(uvValue)
 
-                    // changes uv index background color based on the uv index value
+                    // Changes uv index background color based on the uv index value (favorable, moderate, or severe)
                     if (uvIndex < 3) {
                         document.getElementById("uvCondition").style.backgroundColor = "green";
                     } else if (uvIndex < 6) {
@@ -168,43 +170,42 @@ function weatherInfo() {
 
                 })
 
-            // shows weather information after all information is retrieved
+            // Shows weather information after all information is retrieved
             removeHide()
             forecastHeader.classList.remove("hide")
-            // clears search input box after weather information is displayed
+
+            // Clears search input box after weather information is displayed
             userInput.value = "";
 
         })
-        // If invalid input is entered, modal of no location found is triggered.
+        // If invalid input is entered or an error, no location function is triggered
         .catch(error => noLocation())
-
-
 }
 
-// toggles on modal prompting user that no location has been found 
+// Toggles on modal prompting user that no location has been found 
 function noLocation() {
     $('#exampleModal').modal('toggle');
     forecastHeader.classList.add("hide")
     addHide()
 }
 
-// clears input value after no location modal has been closed
-closeButton.addEventListener("click", function () {
-    userInput.value = "";
-})
-
-// function to add and remove hide class (hides weather information)
+// Functions to add and remove hide class (hides/displays weather information)
 function removeHide() {
-    if (currentWeather.classList.contains("hide")) {
-        currentWeather.classList.remove("hide");
+    if (weatherInformation.classList.contains("hide")) {
+        weatherInformation.classList.remove("hide");
     }
 }
 
 function addHide() {
-    if (!currentWeather.classList.contains("hide")) {
-        currentWeather.classList.add("hide");
+    if (!weatherInformation.classList.contains("hide")) {
+        weatherInformation.classList.add("hide");
     }
 }
+
+// Clears input value after no location modal has been closed
+closeButton.addEventListener("click", function () {
+    userInput.value = "";
+})
 
 // Calls init to retrieve data and render it to the page on load
 init()
