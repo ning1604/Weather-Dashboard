@@ -82,7 +82,7 @@ function weatherInfo() {
     currentWeather.innerHTML = "";
     fiveDayForecast.innerHTML = "";
 
-    fetch('https://api.openweathermap.org/data/2.5/forecast?q=' + userInput.value + '&units=imperial&appid=addApiKeyHere')
+    fetch('https://api.openweathermap.org/data/2.5/forecast?q=' + userInput.value + '&units=imperial&appid=ce650ca3b8256a609c92e10eac6097e7')
         .then(response => response.json())
         .then(data => {
             console.log(data)
@@ -150,7 +150,7 @@ function weatherInfo() {
             dailyForecast()
 
             // Purpose of second fetch is to get uv index using the latitude and longitude value provided from previous fetch
-            fetch('https://api.openweathermap.org/data/2.5/onecall?lat=' + latValue + '&lon=' + lonValue + '&exclude=daily,hourly,minutely,alerts&appid=addApiKeyHere')
+            fetch('https://api.openweathermap.org/data/2.5/onecall?lat=' + latValue + '&lon=' + lonValue + '&exclude=daily,hourly,minutely,alerts&appid=ce650ca3b8256a609c92e10eac6097e7')
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
